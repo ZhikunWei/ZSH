@@ -12,6 +12,7 @@ def data_corr(filename, outname, out_tem_thre=0.05):
     for col in data:
         if '0' in col:
             del data[col]
+    print(filename, out_tem_thre, data.shape)
     t = data.corr()
     t.to_excel(outname % out_tem_thre, encoding='utf-8_sig')
     print(outname % out_tem_thre)
