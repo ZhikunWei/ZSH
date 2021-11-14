@@ -68,6 +68,7 @@ def preprocess(filename, out_name):
 def data_corr(filename, outname, thre):
     data = pd.read_excel(filename)
     data = data[abs(data['油品出口温度avg_dif']) >= thre]
+    print(filename, thre, data.shape)
     del data['燃料阀开度dif_rate']
     t = data.corr()
     t.to_excel(outname % thre, encoding='utf-8_sig')
