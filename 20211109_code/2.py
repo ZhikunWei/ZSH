@@ -60,21 +60,26 @@ def preprocess(filename, out_name):
         data2save = data2save[abs(data2save[col + 'dif_rate']) < 0.1]
         del data2save[col + 'dif_rate']
     # data2save = data2save[abs(data2save['油品出口温度avg_dif']) > 0.1]
-    del data['燃料阀开度dif_rate']
+    
     data2save.to_excel(out_name, index=False, encoding='utf-8_sig')
     print(out_name)
 
 
-def data_corr(filename, outname):
+def data_corr(filename, outname, thre):
     data = pd.read_excel(filename)
-    # data = data[abs(data['油品出口温度avg_dif']) > 0.1]
+    data = data[abs(data['油品出口温度avg_dif']) >= thre]
+    del data['燃料阀开度dif_rate']
     t = data.corr()
-    t.to_excel(outname, encoding='utf-8_sig')
-    print(outname)
+    t.to_excel(outname % thre, encoding='utf-8_sig')
+    print(outname % thre)
+    
 
+# preprocess('D:\PyCharmProjects\ZSH\data\常压炉1015-1026.xlsx', '常压炉前3列.xlsx')
+# preprocess('D:\PyCharmProjects\ZSH\data\减压炉1015-1027.xlsx', '减压炉前3列.xlsx')
 
-preprocess('D:\PyCharmProjects\ZSH\data\常压炉1015-1026.xlsx', '常压炉前3列.xlsx')
-preprocess('D:\PyCharmProjects\ZSH\data\减压炉1015-1027.xlsx', '减压炉前3列.xlsx')
-
-data_corr('常压炉前3列.xlsx', 'result2/常压炉累积量与燃料相关性.xlsx')
-data_corr('减压炉前3列.xlsx', 'result2/减压炉累积量与燃料相关性.xlsx')
+data_corr('常压炉前3列.xlsx', 'result2/常压炉累积量与燃料相关性-阈值%f.xlsx', 0.2)
+data_corr('常压炉前3列.xlsx', 'result2/常压炉累积量与燃料相关性-阈值%f.xlsx', 0.3)
+data_corr('常压炉前3列.xlsx', 'result2/常压炉累积量与燃料相关性-阈值%f.xlsx', 0.4)
+data_corr('减压炉前3列.xlsx', 'result2/减压炉累积量与燃料相关性-阈值%f.xlsx', 0.2)
+data_corr('减压炉前3列.xlsx', 'result2/减压炉累积量与燃料相关性-阈值%f.xlsx', 0.3)
+data_corr('减压炉前3列.xlsx', 'result2/减压炉累积量与燃料相关性-阈值%f.xlsx', 0.4)
